@@ -6,16 +6,32 @@ import Search from "./components/Search";
 
 const UNSPLASH_KEY = process.env.REACT_APP_UNSPLASH_KEY;
 
+type Photo = {
+  id: number;
+  width: number;
+  height: number;
+  urls: { large: string; regular: string; raw: string; small: string };
+  color: string | null;
+  user: {
+    username: string;
+    name: string;
+  };
+};
+
 function App() {
-  const [term, setTerm] = useState(" ");
+  const [term, setTerm] = useState("");
+  const [images, setImages] = useState<Photo[]>([]);
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch(
-      `https://api.unsplash.com/photos/random/?query=${term}&client_id=${UNSPLASH_KEY}`
+      `https://api.unsplash.com/photos/random/?query=${term}&client_id=${UNSPLASH_KEY}`,
     )
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data: Photo) => {
+        setImages([data, ...images]);
+        console.log(images);
+      })
       .catch((err) => console.log(err));
 
     setTerm("");

@@ -5,6 +5,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import Header from "./components/Header";
 import ImageCard from "./components/ImageCard";
 import Search from "./components/Search";
+import Welcome from "./components/Welcome";
 
 import { ImageType, UnsplashPhotoType } from "./types/types";
 
@@ -38,15 +39,19 @@ function App() {
       <Header />
       <Search term={term} setTerm={setTerm} handleSubmit={handleSearchSubmit} />
 
-      <Container className="mt-4">
-        <Row xs={1} md={2} lg={3}>
-          {images.map((image) => (
-            <Col key={image.id} className="pb-3">
-              <ImageCard image={image} deleteImage={handleDeleteImage} />
-            </Col>
-          ))}
-        </Row>
-      </Container>
+      {images.length ? (
+        <Container className="mt-4">
+          <Row xs={1} md={2} lg={3}>
+            {images.map((image) => (
+              <Col key={image.id} className="pb-3">
+                <ImageCard image={image} deleteImage={handleDeleteImage} />
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      ) : (
+        <Welcome />
+      )}
     </div>
   );
 }

@@ -13,3 +13,16 @@
 body {
   margin: 0;
 }
+
+.hero {
+  height: 50vh;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(70, 201, 249, 0.5),
+      rgba(203, 133, 225, 0.5)
+    ),
+    url(../img/hero.jpg);
+  background-size: cover;
+  background-position: top;
+  position: relative;
+}

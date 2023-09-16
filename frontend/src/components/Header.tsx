@@ -7,9 +7,12 @@ const navbarStyle: React.CSSProperties = {
 
 const Header = () => {
   return (
-    <Navbar style={navbarStyle} variant="light">
+    <Navbar style={navbarStyle} variant="light" className="shadow-sm py-3">
       <Container>
-        <Logo style={{ maxWidth: "12rem", maxHeight: "2rem" }} />
+        <Logo
+          style={{ maxWidth: "12rem", maxHeight: "2rem" }}
+          title="Images Gallery"
+        />
       </Container>
     </Navbar>
   );

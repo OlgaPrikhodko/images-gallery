@@ -9,7 +9,7 @@ import Welcome from "./components/Welcome";
 
 import { ImageType, UnsplashPhotoType } from "./types/types";
 
-const UNSPLASH_KEY = process.env.REACT_APP_UNSPLASH_KEY;
+const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:5050";
 
 function App() {
   const [term, setTerm] = useState("");
@@ -17,9 +17,7 @@ function App() {
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch(
-      `https://api.unsplash.com/photos/random/?query=${term}&client_id=${UNSPLASH_KEY}`,
-    )
+    fetch(`${API_URL}/new-image?query=${term}`)
       .then((res) => res.json())
       .then((data: UnsplashPhotoType) => {
         setImages([{ ...data, title: term }, ...images]);

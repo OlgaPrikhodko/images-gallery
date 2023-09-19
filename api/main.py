@@ -1,3 +1,4 @@
+"""Module providing image api"""
 import os
 import requests
 from dotenv import load_dotenv
@@ -22,13 +23,15 @@ app.config["DEBUG"] = DEBUG
 
 @app.route("/new-image")
 def new_image():
+    """get random image from unsplash api"""
     word = request.args.get("query")
     headers = {
         "Authorization": "Client-ID " + UNSPLASH_KEY,
         "Accept-version": "v1"
     }
     params = {"query": word}
-    response = requests.get(url=UNSPLASH_URL, headers=headers, params=params)
+    response = requests.get(
+        url=UNSPLASH_URL, headers=headers, params=params, timeout=1)
     data = response.json()
 
     return data

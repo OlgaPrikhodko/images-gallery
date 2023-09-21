@@ -14,6 +14,10 @@ export default defineConfig(({ mode }) => {
     define: {
       "process.env": processEnv,
     },
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+    },
     plugins: [react(), svgr()],
   };
 });

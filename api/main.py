@@ -13,7 +13,8 @@ DEBUG = bool(os.environ.get("DEBUG", True))
 
 if not UNSPLASH_KEY:
     raise EnvironmentError(
-        "Please create .env.local file and insert there UNSPLASH_KEY")
+        "Please create .env.local file and insert there UNSPLASH_KEY"
+    )
 
 app = Flask(__name__)
 CORS(app)
@@ -25,13 +26,9 @@ app.config["DEBUG"] = DEBUG
 def new_image():
     """get random image from unsplash api"""
     word = request.args.get("query")
-    headers = {
-        "Authorization": "Client-ID " + UNSPLASH_KEY,
-        "Accept-version": "v1"
-    }
+    headers = {"Authorization": "Client-ID " + UNSPLASH_KEY, "Accept-version": "v1"}
     params = {"query": word}
-    response = requests.get(
-        url=UNSPLASH_URL, headers=headers, params=params, timeout=1)
+    response = requests.get(url=UNSPLASH_URL, headers=headers, params=params, timeout=1)
     data = response.json()
 
     return data

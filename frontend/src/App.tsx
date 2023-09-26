@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
 import Header from "./components/Header";
@@ -16,11 +16,26 @@ function App() {
   const [term, setTerm] = useState("");
   const [images, setImages] = useState<ImageType[]>([]);
 
+  const getSavedImages = async () => {
+    try {
+      const res = await axios.get<ImageType[]>(`${API_URL}/images`);
+      setImages(res.data || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getSavedImages();
+  }, []);
+
   const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const res = await axios.get(`${API_URL}/new-image?query=${term}`);
+      const res = await axios.get<UnsplashPhotoType>(
+        `${API_URL}/new-image?query=${term}`,
+      );
       setImages([{ ...res.data, title: term }, ...images]);
     } catch (error) {
       console.log(error);

@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
 import { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
@@ -15,16 +16,15 @@ function App() {
   const [term, setTerm] = useState("");
   const [images, setImages] = useState<ImageType[]>([]);
 
-  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSearchSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch(`${API_URL}/new-image?query=${term}`)
-      .then((res) => res.json())
-      .then((data: UnsplashPhotoType) => {
-        setImages([{ ...data, title: term }, ...images]);
-        console.log(images);
-      })
-      .catch((err) => console.log(err));
 
+    try {
+      const res = await axios.get(`${API_URL}/new-image?query=${term}`);
+      setImages([{ ...res.data, title: term }, ...images]);
+    } catch (error) {
+      console.log(error);
+    }
     setTerm("");
   };
 

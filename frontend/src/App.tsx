@@ -6,6 +6,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import Header from "./components/Header";
 import ImageCard from "./components/ImageCard";
 import Search from "./components/Search";
+import Spinner from "./components/Spinner";
 import Welcome from "./components/Welcome";
 
 import { ImageType, UnsplashPhotoType } from "./types/types";
@@ -15,11 +16,13 @@ const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:5050";
 function App() {
   const [term, setTerm] = useState("");
   const [images, setImages] = useState<ImageType[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const getSavedImages = async () => {
     try {
       const res = await axios.get<ImageType[]>(`${API_URL}/images`);
       setImages(res.data || []);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -78,24 +81,35 @@ function App() {
   return (
     <div>
       <Header />
-      <Search term={term} setTerm={setTerm} handleSubmit={handleSearchSubmit} />
 
-      {images.length ? (
-        <Container className="mt-4">
-          <Row xs={1} md={2} lg={3}>
-            {images.map((image) => (
-              <Col key={image.id} className="pb-3">
-                <ImageCard
-                  image={image}
-                  deleteImage={handleDeleteImage}
-                  saveImage={handleSaveImage}
-                />
-              </Col>
-            ))}
-          </Row>
-        </Container>
+      {loading ? (
+        <Spinner />
       ) : (
-        <Welcome />
+        <>
+          <Search
+            term={term}
+            setTerm={setTerm}
+            handleSubmit={handleSearchSubmit}
+          />
+
+          {images.length ? (
+            <Container className="mt-4">
+              <Row xs={1} md={2} lg={3}>
+                {images.map((image) => (
+                  <Col key={image.id} className="pb-3">
+                    <ImageCard
+                      image={image}
+                      deleteImage={handleDeleteImage}
+                      saveImage={handleSaveImage}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+          ) : (
+            <Welcome />
+          )}
+        </>
       )}
     </div>
   );

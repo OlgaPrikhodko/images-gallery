@@ -40,20 +40,37 @@ def new_image():
 
 @app.route("/images", methods=["GET", "POST"])
 def images():
-    """images endpoint"""
+    """get and post images endpoint"""
     if request.method == "GET":
-        # read images from the db
+        # read images from the database
         imgs = images_collection.find({})
 
         return jsonify([img for img in imgs])
+
     if request.method == "POST":
-        # save image in the db
+        # save image in the database
         image = request.get_json()
         image["_id"] = image.get("id")
         result = images_collection.insert_one(image)
         inserted_id = result.inserted_id
 
         return jsonify({"inserted_id": inserted_id})
+
+
+@app.route("/images/<image_id>", methods=["DELETE"])
+def image_delete(image_id):
+    """delete image endpoint"""
+    if request.method == "DELETE":
+        # delete image from database
+        result = images_collection.delete_one({"_id": image_id})
+
+        if not result:
+            return {"error": "Image wasn't deleted. Please try again."}, 500
+
+        if result and not result.deleted_count:
+            return {"error": "Image not found"}, 404
+
+        return {"deleted_id": image_id}
 
 
 if __name__ == "__main__":

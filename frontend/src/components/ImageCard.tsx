@@ -4,9 +4,10 @@ import { ImageType } from "../types/types";
 type ImageCardProps = {
   image: ImageType;
   deleteImage: (id: string) => void;
+  saveImage: (id: string) => void;
 };
 
-const ImageCard = ({ image, deleteImage }: ImageCardProps) => {
+const ImageCard = ({ image, deleteImage, saveImage }: ImageCardProps) => {
   return (
     <Card style={{ width: "18rem" }}>
       <Card.Img variant="top" src={image.urls.small} />
@@ -17,7 +18,12 @@ const ImageCard = ({ image, deleteImage }: ImageCardProps) => {
         </Card.Text>
         <Button variant="primary" onClick={() => deleteImage(image.id)}>
           Delete
-        </Button>
+        </Button>{" "}
+        {!image.saved && (
+          <Button variant="secondary" onClick={() => saveImage(image.id)}>
+            Save
+          </Button>
+        )}
       </Card.Body>
     </Card>
   );

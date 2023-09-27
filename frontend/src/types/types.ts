@@ -10,6 +10,7 @@ export type UnsplashPhotoType = {
   };
   description: string | null;
   alt_description: string;
+  saved: boolean;
 };
 
 export type ImageType = UnsplashPhotoType & {

@@ -1,4 +1,4 @@
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Nav } from "react-bootstrap";
 import { ImageType } from "../types/types";
 
 type ImageCardProps = {
@@ -8,6 +8,9 @@ type ImageCardProps = {
 };
 
 const ImageCard = ({ image, deleteImage, saveImage }: ImageCardProps) => {
+  const authorName = image.user?.name || "No author name";
+  const authorPortfolioUrl = image.user?.portfolio_url;
+
   return (
     <Card style={{ width: "18rem" }}>
       <Card.Img variant="top" src={image.urls.small} />
@@ -25,6 +28,17 @@ const ImageCard = ({ image, deleteImage, saveImage }: ImageCardProps) => {
           </Button>
         )}
       </Card.Body>
+      <Card.Footer className="text-center text-muted">
+        {authorPortfolioUrl ? (
+          <Nav.Item>
+            <Nav.Link href={authorPortfolioUrl} target="_blank">
+              {authorName}
+            </Nav.Link>
+          </Nav.Item>
+        ) : (
+          <div>{authorName}</div>
+        )}
+      </Card.Footer>
     </Card>
   );
 };

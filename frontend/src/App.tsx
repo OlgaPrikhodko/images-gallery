@@ -1,7 +1,11 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
+
 import { Col, Container, Row } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Header from "./components/Header";
 import ImageCard from "./components/ImageCard";
@@ -23,8 +27,11 @@ function App() {
       const res = await axios.get<ImageType[]>(`${API_URL}/images`);
       setImages(res.data || []);
       setLoading(false);
+      toast.success("Saved images downloaded");
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error)
+        toast.error(error?.message || "Some problem with saving image");
+      else console.log(error);
     }
   };
 
@@ -40,8 +47,11 @@ function App() {
         `${API_URL}/new-image?query=${term}`,
       );
       setImages([{ ...res.data, title: term }, ...images]);
+      toast.info(`New image '${term}' was founded`);
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error)
+        toast.error(error?.message || "Some problem with searching image.");
+      else console.log(error);
     }
     setTerm("");
   };
@@ -50,10 +60,14 @@ function App() {
     try {
       const res = await axios.delete(`${API_URL}/images/${id}`);
       if (res.data?.deleted_id) {
+        const deletedImage = images.find((image) => image.id === id);
         setImages(images.filter((image) => image.id !== id));
+        toast.warning(`Image '${deletedImage?.title}' was deleted`);
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error)
+        toast.error(error?.message || "Some problem with deleting image");
+      else console.log(error);
     }
   };
 
@@ -72,9 +86,12 @@ function App() {
             image.id === id ? { ...image, saved: true } : image,
           ),
         );
+        toast.info(`New image ${imageToSave.title} was saved`);
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error)
+        toast.error(error?.message || "Some problem with saving image");
+      else console.log(error);
     }
   };
 
@@ -111,6 +128,7 @@ function App() {
           )}
         </>
       )}
+      <ToastContainer position="bottom-right" />
     </div>
   );
 }
